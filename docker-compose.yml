@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  gost-ukraine:
+    image: gogost/gost:latest
+    container_name: "proxy_ukraine_kyiv"
+    command:
+      - "-L=:7001"
+      - "-F=http://user:password@host:port"
+    ports:
+      - "7001:7001"
+    restart: unless-stopped
+
+  gost-kuala-lumpur:
+    image: gogost/gost:latest
+    container_name: "proxy_kuala_lumpur"
+    command:
+      - "-L=:7002"
+      - "-F=http://user:password@host:port"
+    ports:
+      - "7002:7002"
+    restart: unless-stopped
+
+  proxy-api:
+    build: ./server
+    container_name: "proxy-control-api"
+    ports:
+      - "7654:7654"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
